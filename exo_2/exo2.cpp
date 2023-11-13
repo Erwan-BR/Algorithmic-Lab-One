@@ -106,6 +106,16 @@ int getDataFromInput(const std::string intputFileName, std::vector<int> &outputV
             outputVector.push_back(std::stoi(token));
         }
 
+        // If the number of the first line is smaller than the size of the vector, we have to get a sub vector :
+        // The size has to be positive
+        if (0 < returnedValue)
+        {
+            for (int index = outputVector.size(); returnedValue < index; index--)
+            {
+                outputVector.pop_back();
+            }
+        }
+
         // Closing the file because we do not need it anymore.
         readingFile.close();
     }
