@@ -10,7 +10,7 @@ using namespace std;
 /// @param tree 
 /// @param processed 
 /// @param node 
-void matrixProcess(vector<vector<int>> matrix, vector<vector<int>>* tree,vector<int>* processed, int node)
+void matrixProcess(vector<vector<int>> matrix, vector<vector<int>>* tree, vector<int>* processed, int node)
 {
 	(*processed)[node-1] = 1;
 
@@ -121,7 +121,8 @@ void listProcess(vector<vector<int>> list, vector<vector<int>>* tree, vector<int
 /// @brief 
 /// @param input 
 /// @return 
-vector<int> listCompute(vector<int> input){
+vector<int> listCompute(vector<int> input)
+{
 	int nodes_n = input[0];
 	int edges_n = input[1];
 
@@ -148,7 +149,7 @@ vector<int> listCompute(vector<int> input){
 	}
 	int starting_node = 1;
 
-	listProcess(list, &tree, &processed,starting_node);
+	listProcess(list, &tree, &processed, starting_node);
 
 	for (i=0; i<processed.size(); i++)
 	{
@@ -160,7 +161,7 @@ vector<int> listCompute(vector<int> input){
 	}
 
 	vector<int> edges;
-	int new_edges_n=0;
+	int new_edges_n = 0;
 	for (i=0; i<nodes_n; i++)
 	{
 		for(int k : tree[i])
