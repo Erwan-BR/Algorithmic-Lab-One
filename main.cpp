@@ -10,7 +10,7 @@ int main()
         try
         {
             // Showing a prompt to the user
-            std::cout << std::endl << "Type any number from 1 to 6 to see what the associated exercice main function does. ";
+            std::cout << std::endl << "Type any number from 1 to 6 to see what the associated exercise main function does. ";
             std::cout << "Type 0 to exit." << std::endl;
             
             // Asking the number of the question he wanna see the answer.
