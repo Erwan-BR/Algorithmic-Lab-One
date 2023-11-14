@@ -2,5 +2,15 @@
 
 void mainQuestion4()
 {
-    std::cout << "Question n°4 is not done yet." << std::endl;
+    vector<int> input;
+	input = getVectorFromInput("INP_ARB_GRAPH.txt");
+	
+    int i;
+	vector<int> output;
+
+	output = matrixCompute(input);
+	writeVectorIntotextFile(output,"OUT_ARB_GRAPH_MATRIX.txt");
+    
+	output = listCompute(input);
+	writeVectorIntotextFile(output,"OUT_ARB_GRAPH_LIST.txt");
 }
