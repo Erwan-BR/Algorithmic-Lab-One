@@ -31,4 +31,7 @@ void mainQuestion2()
         std::cout << inputVector[output] << " ";
     }
     std::cout << std::endl;
+    
+    writeDataIntotextFile(outputIndexForLongest, "OUT_MONO_SEQ.TXT");
+
 }

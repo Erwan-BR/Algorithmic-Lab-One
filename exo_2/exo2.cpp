@@ -2,12 +2,11 @@
 
 std::vector<int> getLongestIncreasingSequence(const std::vector<int>& inputVector)
 {
-    
     // Get the size of the vector
     int inputVectorSize = inputVector.size();
 
     // If the vector is empty, nothing to return.
-    if (inputVectorSize == 0)
+    if (0 == inputVectorSize)
     {
         return {};
     }
@@ -144,7 +143,7 @@ void writeDataIntotextFile(const std::vector<int> indexOfVectorToWrite, const st
 		for (int index = 0; index < indexOfVectorToWrite.size(); index++)
 		{
 			// Writing in the terminal the textFile information concerning the current student.
-			writingFile << "a[" << index << "] = " << indexOfVectorToWrite[index] << std::endl;
+			writingFile << "a[" << index + 1 << "] = " << indexOfVectorToWrite[index] << std::endl;
 		}
 		// Closing the file because we do not need it anymore.
 		writingFile.close();
