@@ -2,7 +2,7 @@
 
 ## Description of the repo
 
-This repository contains the resolution of an algoithmetic tutorial done in binomial with [Adrien MILLASSEAU](https://github.com/AMillasseau).
+This repository contains the resolution of an algorithms lab done in binomial with [Adrien MILLASSEAU](https://github.com/AMillasseau).
 
 The subject is available [here](resources/lab_subject_fr.pdf).
 
