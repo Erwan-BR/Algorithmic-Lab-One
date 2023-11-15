@@ -9,13 +9,13 @@
 
 using namespace std;
 
-void matrixProcess(vector<vector<int>> matrix, vector<int>* comp, vector<int>* processed, int node);
-vector<vector<int>> matrixCompute(vector<int> input);
+void matrixProcess_Exo5(vector<vector<int>> matrix, vector<int>* comp, vector<int>* processed, int inputNode);
+vector<vector<int>> matrixCompute_Exo5(vector<int> input);
 
-void listProcess(vector<vector<int>> matrix, vector<int>* comp, vector<int>* processed, int node);
-vector<vector<int>> listCompute(vector<int> input);
+void listProcess_Exo5(vector<vector<int>> matrix, vector<int>* comp, vector<int>* processed, int node);
+vector<vector<int>> listCompute_Exo5(vector<int> input);
 
-std::vector<int> getVectorFromInput_Exo5(std::string intputFileName);
-void writeVectorIntotextFile_Exo5(std::vector<std::vector<int>>, std::string outputFileName);
+vector<int> getDataFromTextFile_Exo5(string intputFileName);
+void writeDataIntoTextFile_Exo5(vector<vector<int>>, string outputFileName);
 
 #endif /* exo5_hpp */

@@ -2,77 +2,92 @@
 
 using namespace std;
 
-/// @brief 
-/// @param matrix 
-/// @param comp 
-/// @param processed 
-/// @param node 
-void matrixProcess(vector<vector<int>> matrix, vector<int>* comp, vector<int>* processed, int node)
+/// @brief Take a matrix to go through a node
+/// @param matrix Matrix of the exercise
+/// @param comp Connex component currently retrieved
+/// @param processed Vector that states which node are processed
+/// @param node Node to process
+void matrixProcess_Exo5(vector<vector<int>> matrix, vector<int>* comp, vector<bool>* processed, int inputNode)
 {
-	(*processed)[node-1] = 1;
-	comp->push_back(node);
-	int i, j;
-	for (i=0; i<(matrix).size(); i++){
-		if((matrix)[node-1][i] != 0 and not((*processed)[i]))
+	// Writing that the node is already viewed.
+	(*processed)[inputNode-1] = true;
+	
+	// Adding the node to the current connex part.
+	comp->push_back(inputNode);
+
+	// Go through every node
+	for (long unsigned int i = 0; i < (matrix).size(); i++)
+	{
+		// Checking if the node i is not already process (to add it to the currernt comnnex component)
+		if((0 != (matrix)[inputNode-1][i])  && !((*processed)[i]))
         {
-			matrixProcess(matrix, comp, processed,i+1);
+			// Process the new node
+			matrixProcess_Exo5(matrix, comp, processed, i+1);
 		}
 	}
 }
 
-/// @brief 
-/// @param input 
-/// @return 
-vector<vector<int>> matrixCompute(vector<int> input)
+/// @brief Find all convexe parts of the given vector
+/// @param input Vector that contains the elements of the text file
+/// @return Matrix that contains multiple convexe part
+vector<vector<int>> matrixCompute_Exo5(vector<int> input)
 {
+	// Checking if the input vector is not empty or too small.
+	if (1 > input.size())
+	{
+		return {{-1}};
+	}
+
+	// Retrieve size from the input vector 
 	int nodes_n = input[0];
 	int edges_n = input[1];
 
-	vector<vector<int>> matrix;
+	// Intanciation of two vectors : matrix that contains all elements, connex that contains all connex parts.
+	vector<vector<int>> matrix(nodes_n, vector<int>(nodes_n, 0));
 	vector<vector<int>> connex;
 
-	int i, j;
-
-	for (i=0; i<nodes_n; i++)
+	// Writing the values that are on the inputFile.
+	for(int index = 1; index < edges_n; index++)
     {
-		matrix.push_back({});
-		for(j=0; j<nodes_n; j++)
-        {
-			matrix[i].push_back(0);
-		}
+		matrix[(input)[index*2]-1][(input)[index*2+1]-1] += 1;
+		matrix[(input)[index*2+1]-1][(input)[index*2]-1] += 1;
 	}
 
-	for(i=1; i<edges_n; i++)
-    {
-		matrix[(input)[i*2]-1][(input)[i*2+1]-1] += 1;
-		matrix[(input)[i*2+1]-1][(input)[i*2]-1] += 1;
-	}
+	// Initialisation of a vector that will inform if a given node is processed (added to a connex component) or not.
+	vector<bool> processed(nodes_n, false);
 
-	vector<int> processed;
-	for (i=0; i<nodes_n; i++)
-    {
-		processed.push_back(0);
-	}
-
+	// Boolean that checked if all nodes are processed.
 	bool all_processed = false;
-	while(not all_processed)
+	
+	// Looping while at least one node is not processed.
+	while(!all_processed)
     {
 		all_processed = true;
-		for(i=0; i<nodes_n; i++)
+		
+		// Iterating among all nodes
+		for(int index = 0; index < nodes_n; index++)
         {
-			if(not processed[i])
+			// Checking if the node is processed. If not, we just found a new connex part !
+			if(!processed[index])
             {
+				// Setting that all component parts are not set.
 				all_processed = false;
+				
+				// Adding a new empty connex part
 				connex.push_back({});
-				matrixProcess(matrix,&(connex.back()),&processed,i+1);
+
+				// Filling the new connex part
+				matrixProcess_Exo5(matrix, &(connex.back()), &processed, index+1);
 			}
 		}
 	}
-
-
-	for (i=0; i<processed.size(); i++)
+	// Security : Checking that all elements are processed.
+	// We should never enter in the nested if.
+	for (long unsigned int i = 0; i < processed.size(); i++)
     {
-		if(not processed[i]){
+		// If at least one element is not porocessed, return an error message.
+		if(!processed[i])
+		{
 			cout << "Error - matrix : Not all nodes processed." << endl;
 			return {{-1}};
 		}
@@ -80,72 +95,94 @@ vector<vector<int>> matrixCompute(vector<int> input)
 	return connex;
 }
 
-/// @brief 
-/// @param list 
-/// @param comp 
-/// @param processed 
-/// @param node 
-void listProcess(vector<vector<int>> list, vector<int>* comp, vector<int>* processed, int node)
+/// @brief Take a list to go through a node
+/// @param list List of the exercise
+/// @param comp Connex component currently retrieved
+/// @param processed Vector that states which node are processed
+/// @param node Node to process
+void listProcess_Exo5(vector<vector<int>> list, vector<int>* comp, vector<bool>* processed, int node)
 {
-	(*processed)[node-1] = 1;
+	// Writing that the node is already viewed.
+	(*processed)[node-1] = true;
+	
+	// Adding the node to the current connex part.
 	comp->push_back(node);
+	
+	// Go through every node
 	for (int i : list[node-1])
     {
-		if(not((*processed)[i]))
+		// Checking if the node i is not already process (to add it to the currernt comnnex component)
+		if(!((*processed)[i]))
         {
-			listProcess(list, comp, processed,i+1);
+			// Process the new node
+			listProcess_Exo5(list, comp, processed, i+1);
 		}
 	}
 }
 
-/// @brief 
-/// @param input 
-/// @return 
-vector<vector<int>> listCompute(vector<int> input)
+/// @brief Find all convexe parts of the given vector
+/// @param input Vector that contains the elements of the text file
+/// @return Matrix that contains multiple convexe part
+vector<vector<int>> listCompute_Exo5(vector<int> input)
 {
+	// Checking if the input vector is not empty or too small.
+	if (1 > input.size())
+	{
+		return {{-1}};
+	}
+
+	// Retrieve size from the input vector 
 	int nodes_n = input[0];
 	int edges_n = input[1];
 
-	vector<vector<int>> list;
+	// Intanciation of two vectors : matrix that contains all elements, connex that contains all connex parts.
+	vector<vector<int>> list(nodes_n, vector<int>());
 	vector<vector<int>> connex;
-	int i, j;
 
-	for (i=0; i<nodes_n; i++)
+	// Writing the values that are on the inputFile.
+	for(int index = 1; index < edges_n; index++)
     {
-		list.push_back({});
+		list[(input)[index*2]-1].push_back((input)[index*2+1]-1);
+		list[(input)[index*2+1]-1].push_back((input)[index*2]-1);
 	}
 
-	for(i=1;i<edges_n;i++)
-    {
-		list[(input)[i*2]-1].push_back((input)[i*2+1]-1);
-		list[(input)[i*2+1]-1].push_back((input)[i*2]-1);
-	}
+	// Initialisation of a vector that will inform if a given node is processed (added to a connex component) or not.
+	vector<bool> processed(nodes_n, false);
 
-	vector<int> processed;
-	for (i=0;i<nodes_n;i++)
-    {
-		processed.push_back(0);
-	}
-
-
+	// Boolean that checked if all nodes are processed.
 	bool all_processed = false;
-	while(not all_processed)
+
+	// Looping while at least one node is not processed.
+	while(!all_processed)
     {
 		all_processed = true;
-		for(i=0; i<nodes_n; i++)
+		
+		// Iterating among all nodes
+		
+		for(int index = 0; index < nodes_n; index++)
         {
-			if(not processed[i])
+			// Checking if the node is processed. If not, we just found a new connex part !
+			
+			if(!processed[index])
             {
+				// Setting that all component parts are not set.
 				all_processed = false;
+				
+				// Adding a new empty connex part
 				connex.push_back({});
-				listProcess(list,&(connex.back()),&processed,i+1);
+
+				// Filling the new connex part
+				listProcess_Exo5(list, &(connex.back()), &processed, index+1);
 			}
 		}
 	}
 
-	for (i=0; i<processed.size(); i++)
+	// Security : Checking that all elements are processed.
+	// We should never enter in the nested if.
+	for (long unsigned int i = 0; i < processed.size(); i++)
     {
-		if(not processed[i])
+		// If at least one element is not processed, return an error message.
+		if(!(processed[i]))
         {
 			cout << "Error - matrix : Not all nodes processed." << endl;
 			return {{-1}};
@@ -154,46 +191,46 @@ vector<vector<int>> listCompute(vector<int> input)
 	return connex;
 }
 
-/// @brief 
-/// @param intputFileName 
-/// @return 
-std::vector<int> getVectorFromInput_Exo5(std::string intputFileName)
+/// @brief Construct a vector based on the content of an input file
+/// @param intputFileName Name of the file we want to open
+/// @return Input vector for the exercise
+vector<int> getDataFromTextFile_Exo5(string intputFileName)
 {
     // Variables to retrieve from the line.
-    std::vector<int> outputVector ;
+    vector<int> outputVector ;
 
     // Instantiation of a fstream object which is a file.
-	std::fstream readingFile;
+	fstream readingFile;
 
 	// Choose an input folder name and concatenate it to the name of the file.
-    std::string inputFolderName = "textFiles/";
-    std::string intputFileToRead = inputFolderName + intputFileName;
+    string inputFolderName = "textFiles/";
+    string intputFileToRead = inputFolderName + intputFileName;
 
 	// Opening the file in reading mode.
-	readingFile.open(intputFileToRead, std::ios::in);
+	readingFile.open(intputFileToRead, ios::in);
 
 	// Checking if the file is correctly opened.
 	if (readingFile.is_open())
 	{
         // Instantiation of a string that will represent the line in the document.
-        std::string lineFromInputText;
+        string lineFromInputText;
 
         // Create the string that contains tokens from the original string
-        std::string token;
+        string token;
 
-        std::stringstream ss;
+        stringstream ss;
 
         // Retrieve lines into lineFromInputText
-        while(std::getline(readingFile, lineFromInputText))
+        while(getline(readingFile, lineFromInputText))
         {
             // constructing stream from the string
-            ss = std::stringstream(lineFromInputText);
+            ss = stringstream(lineFromInputText);
 
             // Looping while i can get another int
             while (getline(ss, token, ' '))
             {
                 // Store token string in the vector
-                outputVector.push_back(std::stoi(token));
+                outputVector.push_back(stoi(token));
             }
         }
 
@@ -203,27 +240,28 @@ std::vector<int> getVectorFromInput_Exo5(std::string intputFileName)
     return outputVector;
 }
 
-/// @brief 
-/// @param vectorToWrite 
-/// @param outputFileName 
-void writeVectorIntotextFile_Exo5(std::vector<std::vector<int>> vectorToWrite, std::string outputFileName)
+/// @brief Write the different connexe part into a text file.
+/// @param vectorToWrite Vector to export
+/// @param outputFileName Name of the file we want to generate
+void writeDataIntoTextFile_Exo5(vector<vector<int>> vectorToWrite, string outputFileName)
 {
     // Instantiation of a fstream object which is a file.
-	std::fstream writingFile;
+	fstream writingFile;
 
     // Choose an input folder name and concatenate it to the name of the file.
-    std::string outputFolderName = "textFiles/";
-    std::string outputFileToRead = outputFolderName + outputFileName;
+    string outputFolderName = "textFiles/";
+    string outputFileToRead = outputFolderName + outputFileName;
 
 	// Opening the file in reading mode.
-	writingFile.open(outputFileToRead, std::ios::out);
+	writingFile.open(outputFileToRead, ios::out);
 
 	// Checking if the file is correctly opened.
 	if (writingFile.is_open())
 	{
 		writingFile << vectorToWrite.size() << endl;
-		int i, j;
-		for (i=0; i<vectorToWrite.size(); i++)
+		
+		// Writing all connex components of the vector to write.
+		for (long unsigned int i = 0; i < vectorToWrite.size(); i++)
 		{
 			writingFile << "Composante Connexe " << to_string(i+1) << " :" <<endl;
 			for(int j : vectorToWrite[i])
