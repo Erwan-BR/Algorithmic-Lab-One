@@ -2,21 +2,14 @@
 
 void mainQuestion6()
 {
-	std::cout << "test" << std::endl;
-	std::vector<int> input;
-	input = getVectorFromInput_Exo6("INP_DIJ_GRAPH.txt");
+	// Get the vector from the input file
+	std::vector<int> inputVector = getDataFromTextFile_Exo6("INP_DIJ_GRAPH.txt");
 
-	std::cout << "Vecteur d'entree :" << std::endl;
-	
-	for (int test : input)
-	{
-		std::cout << test << " ";
-	}
-	std::cout << std::endl;
+	// Retrieve the output vector
+	std::vector<int> outputVector = matrixCompute_Exo6(inputVector);
 
+	// Write the shortests path into a text file
+	writeDataIntoTextFile_Exo6(outputVector, "OUT_DIJ_GRAPH_MATRIX.txt");
 
-	int i;
-	std::vector<int> output;
-	output = matrixCompute(input);
-	/*writeVectorIntotextFile_Exo6(output, "OUT_DIJ_GRAPH_MATRIX.txt");*/
+	std::cout << "The output file (for question 6.1), based on the input files, has been generated!" << std::endl;
 }

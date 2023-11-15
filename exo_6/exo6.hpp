@@ -12,10 +12,9 @@
 
 using namespace std;
 
-vector<int> matrixCompute(vector<int> input);
+vector<int> matrixCompute_Exo6(vector<int> input);
 
-std::vector<int> getVectorFromInput_Exo6(std::string intputFileName);
-
-void writeVectorIntotextFile_Exo6(std::vector<int>, std::string outputFileName);
+vector<int> getDataFromTextFile_Exo6(string intputFileName);
+void writeDataIntoTextFile_Exo6(vector<int>, string outputFileName);
 
 #endif /* exo6_hpp */
