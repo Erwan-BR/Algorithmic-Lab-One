@@ -1,6 +1,9 @@
 #include "./exo2.hpp"
 
-std::vector<int> getLongestIncreasingSequence(const std::vector<int>& inputVector)
+/// @brief Retrieve the longest increasing sequence from an input vector
+/// @param inputVector Vector whose largest increasing sub-sequence is desired
+/// @return Largest ascending subsequence.
+std::vector<int> getLongestIncreasingSequenceIndexes(const std::vector<int>& inputVector)
 {
     // Get the size of the vector
     int inputVectorSize = inputVector.size();
@@ -46,6 +49,7 @@ std::vector<int> getLongestIncreasingSequence(const std::vector<int>& inputVecto
         }
     }
 
+    // Retrieve the index of the longest increasing subsequence
     std::vector<int> longestSubsequenceIndexes = {endIndex};
     while (endIndex != -1)
     {
@@ -59,11 +63,38 @@ std::vector<int> getLongestIncreasingSequence(const std::vector<int>& inputVecto
     return longestSubsequenceIndexes;
 }
 
-int getDataFromInput(const std::string intputFileName, std::vector<int> &outputVector)
+/// @brief Get a subsequence from a vector, according to the desired indexes to keep.
+/// @param vectorToRetrieve Vector whose indexes are to be kept.
+/// @param listOfIndexes Index to kep from vectorToRetrieve
+/// @return Subsequence from the input vector
+std::vector<int> getSequenceFromIndex(const std::vector<int> &vectorToRetrieve, const std::vector<int> &listOfIndexes)
 {
-    // Instanciation of the returned value.
-    int returnedValue = -1;
+    std::vector<int> outputVector;
     
+    // Iterating among all indexes to write.
+    for (int index : listOfIndexes)
+    {
+        // Checking if the value can be an index.
+        // Should never happpen, but i's here for security.
+        if (0 > index && (int)vectorToRetrieve.size() < index)
+        {
+            std::cout << "An error occured" << std::endl;
+            return {};
+        }
+        // Adding the value to the desired vector
+        outputVector.push_back(vectorToRetrieve[index]);
+    }
+    return outputVector;
+}
+
+/// @brief Retrieve the sequence whose largest increasing sub-sequence is desired
+/// @param intputFileName Name of the file where the sequence is stored
+/// @return Vector whose largest increasing sub-sequence is desired
+std::vector<int> getDataFromTextFile_Exo2(const std::string intputFileName)
+{
+    // Instanciation of the returned vector.
+    std::vector<int> outputVector;
+
     // Instantiation of a fstream object which is a file.
 	std::fstream readingFile;
 
@@ -87,7 +118,7 @@ int getDataFromInput(const std::string intputFileName, std::vector<int> &outputV
         getline(readingFile, lineFromInputText);
 
         // Retrieve n.
-        returnedValue = std::stoi(lineFromInputText);
+        long unsigned int desiredSize = std::stoul(lineFromInputText);
 
         // Retrieve the second line into lineFromInputText to have a vector.
         std::getline(readingFile, lineFromInputText);
@@ -107,9 +138,9 @@ int getDataFromInput(const std::string intputFileName, std::vector<int> &outputV
 
         // If the number of the first line is smaller than the size of the vector, we have to get a sub vector :
         // The size has to be positive
-        if (0 < returnedValue)
+        if (0 < desiredSize)
         {
-            for (int index = outputVector.size(); returnedValue < index; index--)
+            for (long unsigned int index = outputVector.size(); desiredSize < index; index--)
             {
                 outputVector.pop_back();
             }
@@ -118,11 +149,22 @@ int getDataFromInput(const std::string intputFileName, std::vector<int> &outputV
         // Closing the file because we do not need it anymore.
         readingFile.close();
     }
-    return returnedValue;
+    return outputVector;
 }
 
-void writeDataIntotextFile(const std::vector<int> indexOfVectorToWrite, const std::string outputFileName)
+/// @brief Write information concerning the longest subsequence into the output file
+/// @param vectorToWrite Longest increasing subsequence
+/// @param originalIndexes Indexes of the elements of the longest subsequence found
+/// @param outputFileName Name of the file to save
+void writeDataIntoTextFile_Exo2(const std::vector<int> vectorToWrite, const std::vector<int> originalIndexes, const std::string outputFileName)
 {
+    // Checking if both vectors are the same size. It's to add security, they should always have the same size.
+    if (vectorToWrite.size() != originalIndexes.size())
+    {
+        std::cout << "An error occured." << std::endl;
+        return ;
+    }
+
     // Instantiation of a fstream object which is a file.
 	std::fstream writingFile;
 
@@ -137,13 +179,14 @@ void writeDataIntotextFile(const std::vector<int> indexOfVectorToWrite, const st
 	if (writingFile.is_open())
 	{
         // Writing the size of the subsequence
-        writingFile << indexOfVectorToWrite.size() << std::endl;
+        writingFile << vectorToWrite.size() << std::endl;
 
 		// Iterating among all students.
-		for (int index = 0; index < indexOfVectorToWrite.size(); index++)
+		for (long unsigned int index = 0; index < vectorToWrite.size(); index++)
 		{
 			// Writing in the terminal the textFile information concerning the current student.
-			writingFile << "a[" << index + 1 << "] = " << indexOfVectorToWrite[index] << std::endl;
+            // Adding 1 because mathematical table and informatical table are not the same.
+			writingFile << "a[" << originalIndexes[index] + 1 << "] = " << vectorToWrite[index] << std::endl;
 		}
 		// Closing the file because we do not need it anymore.
 		writingFile.close();

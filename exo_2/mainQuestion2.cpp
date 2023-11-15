@@ -3,8 +3,7 @@
 void mainQuestion2()
 {
     // Getting the input values
-    std::vector<int> inputVector;
-    int sizeOfVector = getDataFromInput("INP_MONO_SEQ.txt", inputVector);
+    std::vector<int> inputVector = getDataFromTextFile_Exo2("INP_MONO_SEQ.txt");
 
     // Display the retrieved vector.
     std::cout << "The input vector is: " << std::endl;
@@ -14,7 +13,7 @@ void mainQuestion2()
     }
     std::cout << std::endl;
 
-    std::vector<int> outputIndexForLongest = getLongestIncreasingSequence(inputVector);
+    std::vector<int> outputIndexForLongest = getLongestIncreasingSequenceIndexes(inputVector);
 
     // Display the indexes vector.
     std::cout << "The indexes of the longest subsequence of the input Vector are: " << std::endl;
@@ -24,6 +23,8 @@ void mainQuestion2()
     }
     std::cout << std::endl;
 
+    std::vector<int> outputVector = getSequenceFromIndex(inputVector, outputIndexForLongest);
+
     // Display the longest subsequence
     std::cout << "The longest subsequence is: " << std::endl;
     for (int output : outputIndexForLongest)
@@ -32,6 +33,7 @@ void mainQuestion2()
     }
     std::cout << std::endl;
     
-    writeDataIntotextFile(outputIndexForLongest, "OUT_MONO_SEQ.TXT");
+    writeDataIntoTextFile_Exo2(outputVector, outputIndexForLongest, "OUT_MONO_SEQ.TXT");
 
+    std::cout << "The output file, based on the input file, has been generated!" << std::endl;
 }
