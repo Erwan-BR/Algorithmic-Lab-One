@@ -2,6 +2,7 @@
 #define mainQuestion3_hpp
 
 #include <iostream>
+#include<numeric>
 
 #include "./exo3.hpp"
 
