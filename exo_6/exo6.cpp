@@ -1,9 +1,5 @@
 #include "./exo6.hpp"
 
-#include <iostream>
-#include <string>
-#include <limits>
-
 using namespace std;
 
 /// @brief 
@@ -12,14 +8,15 @@ using namespace std;
 /// @param previous 
 /// @param node 
 /// @param distance 
-void matrixProcess(vector<vector<int>> matrix,vector<int>* distances,vector<int>* previous,int node,int distance){
+void matrixProcess(vector<vector<int>> matrix, vector<int>* distances, vector<int>* previous, int node, int distance)
+{
 	
 	(*distances)[node-1] = distance;
 
 	int i, j;
-	for (i=0; i < matrix.size(); i++)
+	for (i = 0; i < matrix.size(); i++)
 	{
-		if((distance+matrix[node - 1][i]) < (*distances)[i] && -1 != matrix[node-1][i])
+		if((distance + matrix[node - 1][i]) < (*distances)[i] && -1 != matrix[node-1][i])
 		{
 			(*previous)[i] = node;
 			matrixProcess(matrix, distances, previous, i+1, distance + matrix[node - 1][i]);
@@ -59,7 +56,7 @@ vector<int> matrixCompute(vector<int> input)
 
 	vector<int> distances;
 	vector<int> previous;
-	for (i=0;i<nodes_n;i++)
+	for (i=0; i<nodes_n; i++)
 	{
 		distances.push_back(-1);
 		previous.push_back(0);
@@ -70,7 +67,7 @@ vector<int> matrixCompute(vector<int> input)
 
 
 	i = end - 1;
-	while(distances[i]!=0)
+	while(0 != distances[i])
 	{
 		i = previous[i];
 		ret.insert(ret.begin(), i+1);
