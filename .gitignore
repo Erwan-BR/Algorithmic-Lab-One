@@ -1,3 +1,4 @@
 .vscode/
 build/
 textFiles/OUT_*.txt
+textFiles/OUT_*.TXT

@@ -1,191 +1,100 @@
 #include "./exo2.hpp"
 
-std::vector<std::vector<int>> addIntegerIntoVectors(std::vector<std::vector<int>> vectorOfVectors, int integer)
+/// @brief Retrieve the longest increasing sequence from an input vector
+/// @param inputVector Vector whose largest increasing sub-sequence is desired
+/// @return Largest ascending subsequence.
+std::vector<int> getLongestIncreasingSequenceIndexes(const std::vector<int>& inputVector)
 {
-    // If the integer is smaller than every last value in the vector of vectors, we have to create a vector that contains lony this value
-    bool isPlacedInAVector = false;
+    // Get the size of the vector
+    int inputVectorSize = inputVector.size();
 
-    // New vector that may be add at the end of the loop
-    std::vector<std::vector<int>> vectorsToAdd;
-
-    // Looping among all vectors in the vector.
-    for(std::vector<int> &nestedVector : vectorOfVectors)
+    // If the vector is empty, nothing to return.
+    if (0 == inputVectorSize)
     {
-        // Display the nested vector.
-        std::cout << "the nested vector is: " << std::endl;
-        for (int value : nestedVector)
-        {
-            std::cout << value << " ";
-        }
-        std::cout << std::endl;
-        // If the integer is greater than the last value of this vector, we have two things to do :
-        // 1. Keep the old vector if the gap is not one (because we could miss something by always keeping the integer)
-        // 2. Create a new vector that contains the old one and the new value.
-        
-        // Checking if this integer is just after the last one.
-        if (integer == nestedVector[nestedVector.size() - 1] + 1)
-        {
-            nestedVector.push_back(integer);
-            isPlacedInAVector = true;
-        }
+        return {};
+    }
 
-        // Checking if this integer is bigger (2 or more) than the last one
-        else if (integer > nestedVector[nestedVector.size() - 1])
+    // Two vectors needed :
+    // 1. Store the max len you can have with a certain value.
+    std::vector<int> maxSizeFromValue(inputVectorSize, 1);
+
+    // 2. Store the index of the previous element that correspond to the longest increasing sequence
+    std::vector<int> previousIndexForSubsequence(inputVectorSize, -1);
+
+    // Two int needed :
+    // 1. The maxLength ever obtained
+    int maxLength = 1;
+    // 2. The index of the end of the sequence.
+    int endIndex = 0;
+
+    // Iterating among all elements of the inputVector
+    for (int i = 1; i < inputVectorSize; ++i)
+    {
+        // Iterating among all values before the one we are looking for.
+        for (int j = 0; j < i; ++j)
         {
-            // Copying the vector to keep a "save"
-            std::vector<int> nestedVectorCopy = nestedVector;
+            // Checking if the current value is greater AND if the size obtained is smaller than the one we can have with another value.
+            if (inputVector[i] > inputVector[j] && maxSizeFromValue[i] < maxSizeFromValue[j] + 1)
+            {
+                maxSizeFromValue[i] = maxSizeFromValue[j] + 1;
+                previousIndexForSubsequence[i] = j;
 
-            // Adding this vector to the vector that contains all of them
-            vectorsToAdd.push_back(nestedVectorCopy);
-
-            // Adding the integer to the nestedVector
-            nestedVector.push_back(integer);
-            isPlacedInAVector = true;
-        }
-
-        // If the integer is smaller : nothing to do
-        else
-        {
-            continue;
+                // If we found a new longest sequence, we change the content of the maxLength and the index of the end
+                if (maxSizeFromValue[i] > maxLength)
+                {
+                    maxLength = maxSizeFromValue[i];
+                    endIndex = i;
+                }
+            }
         }
     }
 
-    // If the value has been placed, we have to create an empty vector with just this value.
-    // Will happen when the value is smallest never seen.
-    if (!isPlacedInAVector)
+    // Retrieve the index of the longest increasing subsequence
+    std::vector<int> longestSubsequenceIndexes = {endIndex};
+    while (endIndex != -1)
     {
-        std::vector<int> newVector = {integer};
-        vectorOfVectors.push_back(newVector);
+        longestSubsequenceIndexes.insert(longestSubsequenceIndexes.begin(), previousIndexForSubsequence[endIndex]);
+        endIndex = previousIndexForSubsequence[endIndex];
     }
 
-    // Adding the vectors at the end of the current one.
-    vectorOfVectors.insert(vectorOfVectors.end(), vectorsToAdd.begin(), vectorsToAdd.end());
+    // Returning the list of index needed to get the values of the Longest Increasing Subsequence without -1.
+    longestSubsequenceIndexes.erase(longestSubsequenceIndexes.begin());
+
+    return longestSubsequenceIndexes;
+}
+
+/// @brief Get a subsequence from a vector, according to the desired indexes to keep.
+/// @param vectorToRetrieve Vector whose indexes are to be kept.
+/// @param listOfIndexes Index to kep from vectorToRetrieve
+/// @return Subsequence from the input vector
+std::vector<int> getSequenceFromIndex(const std::vector<int> &vectorToRetrieve, const std::vector<int> &listOfIndexes)
+{
+    std::vector<int> outputVector;
     
-    // At the end of adding this number to the saved vectors, we can delete the useless one.
-    // Example : [1, 2, 7] ; [1, 7] --- No need to keep this one.
-
-    // vectorOfVectors = cleanVectorFromUselessVectors_V2(vectorOfVectors, integer);
-
-    std::cout << "----------------" << std::endl;
-
-    return vectorOfVectors;
-}
-
-std::vector<std::vector<int>> cleanVectorFromUselessVectors(std::vector<std::vector<int>> vectorOfVectors, int integer)
-{
-    // Index that will help to know which vectors that end with integer is the longest.
-    int indexOfGreatestThatEndByInteger = -1;
-
-    // Size of the greatest vector that end by this integer
-    int sizeOfGreatestThatEndByInteger = -1;
-
-    // Index that count the position of the nested vector
-    int index = 0;
-
-    // Looping among all vectors in the vector.
-    for (std::vector<int> nestedVector : vectorOfVectors)
+    // Iterating among all indexes to write.
+    for (int index : listOfIndexes)
     {
-        if (integer == nestedVector[nestedVector.size() - 1] && nestedVector.size() > sizeOfGreatestThatEndByInteger)
+        // Checking if the value can be an index.
+        // Should never happpen, but i's here for security.
+        if (0 > index && (int)vectorToRetrieve.size() < index)
         {
-            // Update the sze of the biggest know vector
-            sizeOfGreatestThatEndByInteger = nestedVector.size();
-
-            // Delete the old vector with the useless index
-            if (indexOfGreatestThatEndByInteger != -1)
-            {
-                vectorOfVectors.erase(vectorOfVectors.begin() + indexOfGreatestThatEndByInteger);
-            }
-
-            // Update the index of the biggest vector finishing by this value.
-            indexOfGreatestThatEndByInteger = index;
+            std::cout << "An error occured" << std::endl;
+            return {};
         }
-
-        // Updating the index of the position into vectorOfVectors.
-        index++;
+        // Adding the value to the desired vector
+        outputVector.push_back(vectorToRetrieve[index]);
     }
-
-    return vectorOfVectors;
-}
-
-std::vector<std::vector<int>> cleanVectorFromUselessVectors_V2(std::vector<std::vector<int>> vectorOfVectors, int integer)
-{
-    // Vectors that contains indexs to delete.
-    std::vector<int> indexToDelete;
-
-    // Current index
-    int index = 0;
-
-    // Size of the vector that contains the greatest number of value and ending by integer.
-    int sizeOfGreatestThatEndByInteger = 0;
-
-    // Index of the vector that contains the greatest number of value and ending by integer.
-    int indexOfGreatestThatEndByInteger = -1;
-
-    // Looping among all vectors in the vector.
-    for (std::vector<int> &nestedVector : vectorOfVectors)
-    {
-        if (integer == nestedVector[nestedVector.size() - 1] && nestedVector.size() > sizeOfGreatestThatEndByInteger)
-        {
-            // Update the sze of the biggest know vector
-            sizeOfGreatestThatEndByInteger = nestedVector.size();
-            
-            // If it's the first time a vector end by integer, we update the index and don't delete anything.
-            if (-1 != indexOfGreatestThatEndByInteger)
-            {
-                // The previous biggest has to be deleted.
-                indexToDelete.push_back(indexOfGreatestThatEndByInteger);
-            }
-            // Update the index of the biggest one
-            indexOfGreatestThatEndByInteger = index;
-        }
-
-        // Updating the index of the position into vectorOfVectors.
-        index++;
-    }
-
-    // Reverse the list of index to avoid modifying them
-    std::reverse(indexToDelete.begin(), indexToDelete.end());
-
-    // Deleting useless vectors 
-    for (int deletingIndex : indexToDelete)
-    {
-        vectorOfVectors.erase(vectorOfVectors.begin() + deletingIndex);
-    }
-    return vectorOfVectors;
-}
-
-std::vector<int> getLongestSequence(std::vector<std::vector<int>> vectorOfVectors)
-{
-    // Creating an output vector
-    std::vector<int> outputVector ;
-
-    // If the vector is empty, return -1
-    if (0 == vectorOfVectors.size())
-    {
-        return outputVector;
-    }
-
-    // Initialisation of the outputVector
-    outputVector = vectorOfVectors[0];
-
-    // Looping among all vectors in the vector.
-    for (std::vector<int> &nestedVector : vectorOfVectors)
-    {
-        // If this vector is bigger, save it into the output value.
-        if (nestedVector.size() > outputVector.size())
-        {
-            outputVector = nestedVector;
-        }
-    }
-
     return outputVector;
 }
 
-int getVectorFromInput(std::string intputFileName, std::vector<int> &outputVector)
+/// @brief Retrieve the sequence whose largest increasing sub-sequence is desired
+/// @param intputFileName Name of the file where the sequence is stored
+/// @return Vector whose largest increasing sub-sequence is desired
+std::vector<int> getDataFromTextFile_Exo2(const std::string intputFileName)
 {
-    // Instanciation of the returned value.
-    int returnedValue = -1;
-    
+    // Instanciation of the returned vector.
+    std::vector<int> outputVector;
+
     // Instantiation of a fstream object which is a file.
 	std::fstream readingFile;
 
@@ -209,7 +118,7 @@ int getVectorFromInput(std::string intputFileName, std::vector<int> &outputVecto
         getline(readingFile, lineFromInputText);
 
         // Retrieve n.
-        returnedValue = std::stoi(lineFromInputText);
+        long unsigned int desiredSize = std::stoul(lineFromInputText);
 
         // Retrieve the second line into lineFromInputText to have a vector.
         std::getline(readingFile, lineFromInputText);
@@ -227,14 +136,35 @@ int getVectorFromInput(std::string intputFileName, std::vector<int> &outputVecto
             outputVector.push_back(std::stoi(token));
         }
 
+        // If the number of the first line is smaller than the size of the vector, we have to get a sub vector :
+        // The size has to be positive
+        if (0 < desiredSize)
+        {
+            for (long unsigned int index = outputVector.size(); desiredSize < index; index--)
+            {
+                outputVector.pop_back();
+            }
+        }
+
         // Closing the file because we do not need it anymore.
         readingFile.close();
     }
-    return returnedValue;
+    return outputVector;
 }
 
-void writeVectorIntotextFile(std::vector<int> vectorToWrite, std::string outputFileName)
+/// @brief Write information concerning the longest subsequence into the output file
+/// @param vectorToWrite Longest increasing subsequence
+/// @param originalIndexes Indexes of the elements of the longest subsequence found
+/// @param outputFileName Name of the file to save
+void writeDataIntoTextFile_Exo2(const std::vector<int> vectorToWrite, const std::vector<int> originalIndexes, const std::string outputFileName)
 {
+    // Checking if both vectors are the same size. It's to add security, they should always have the same size.
+    if (vectorToWrite.size() != originalIndexes.size())
+    {
+        std::cout << "An error occured." << std::endl;
+        return ;
+    }
+
     // Instantiation of a fstream object which is a file.
 	std::fstream writingFile;
 
@@ -248,11 +178,15 @@ void writeVectorIntotextFile(std::vector<int> vectorToWrite, std::string outputF
 	// Checking if the file is correctly opened.
 	if (writingFile.is_open())
 	{
+        // Writing the size of the subsequence
+        writingFile << vectorToWrite.size() << std::endl;
+
 		// Iterating among all students.
-		for (int value : vectorToWrite)
+		for (long unsigned int index = 0; index < vectorToWrite.size(); index++)
 		{
 			// Writing in the terminal the textFile information concerning the current student.
-			writingFile << value << " ";
+            // Adding 1 because mathematical table and informatical table are not the same.
+			writingFile << "a[" << originalIndexes[index] + 1 << "] = " << vectorToWrite[index] << std::endl;
 		}
 		// Closing the file because we do not need it anymore.
 		writingFile.close();

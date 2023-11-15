@@ -9,12 +9,10 @@
 #include <string>
 #include <sstream>
 
-std::vector<std::vector<int>> addIntegerIntoVectors(std::vector<std::vector<int>> vectorOfVectors, int integer);
-std::vector<std::vector<int>> cleanVectorFromUselessVectors(std::vector<std::vector<int>> vectorOfVectors, int integer);
-std::vector<std::vector<int>> cleanVectorFromUselessVectors_V2(std::vector<std::vector<int>> vectorOfVectors, int integer);
-std::vector<int> getLongestSequence(std::vector<std::vector<int>> vectorOfVectors);
+std::vector<int> getLongestIncreasingSequenceIndexes(const std::vector<int>& inputVector);
+std::vector<int> getSequenceFromIndex(const std::vector<int> &vectorToRetrieve, const std::vector<int> &listOfIndexes);
 
-int getVectorFromInput(std::string intputFileName, std::vector<int> &outputVector);
-void writeVectorIntotextFile(std::vector<int> vectorToWrite, std::string outputFileName);
+std::vector<int> getDataFromTextFile_Exo2(const std::string intputFileName);
+void writeDataIntoTextFile_Exo2(const std::vector<int> vectorToWrite, const std::vector<int> originalIndexes, const std::string outputFileName);
 
 #endif /* exo2_hpp */
