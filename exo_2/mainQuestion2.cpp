@@ -33,7 +33,7 @@ void mainQuestion2()
     }
     std::cout << std::endl;
     
-    writeDataIntoTextFile_Exo2(outputVector, outputIndexForLongest, "OUT_MONO_SEQ.TXT");
+    writeDataIntoTextFile_Exo2(outputVector, outputIndexForLongest, "OUT_MONO_SEQ.txt");
 
     std::cout << "The output file, based on the input file, has been generated!" << std::endl;
 }
