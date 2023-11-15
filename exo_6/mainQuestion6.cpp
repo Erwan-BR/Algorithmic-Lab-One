@@ -17,6 +17,6 @@ void mainQuestion6()
 
 	int i;
 	std::vector<int> output;
-	/*output = matrixCompute(input);
-	writeVectorIntotextFile_Exo6(output, "OUT_DIJ_GRAPH_MATRIX.txt");*/
+	output = matrixCompute(input);
+	/*writeVectorIntotextFile_Exo6(output, "OUT_DIJ_GRAPH_MATRIX.txt");*/
 }

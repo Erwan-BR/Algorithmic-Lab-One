@@ -50,8 +50,8 @@ vector<int> matrixCompute(vector<int> input)
 
 	for(i=1; i<edges_n; i++)
 	{
-		matrix[(input)[i*3]-1][(input)[i*3+1]-1] = (input)[i*3+2];
-		matrix[(input)[i*3+1]-1][(input)[i*3]-1] = (input)[i*3+2];
+		matrix[(input)[i*3+1]-1][(input)[i*3+2]-1] = (input)[i*3+3];
+		matrix[(input)[i*3+2]-1][(input)[i*3+1]-1] = (input)[i*3+3];
 	}
 
 	vector<int> distances;
