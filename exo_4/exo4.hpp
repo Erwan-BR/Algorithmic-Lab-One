@@ -9,13 +9,13 @@
 
 using namespace std;
 
-void matrixProcess(vector<vector<int>> matrix, vector<vector<int>>* tree, vector<int>* processed, int node);
-vector<int> matrixCompute(vector<int> input);
+void matrixProcess_Exo4(const vector<vector<int>> matrix, vector<vector<int>>* tree, vector<int>* processed, int inputNode);
+vector<int> matrixCompute_Exo4(vector<int> input);
 
-void listProcess(vector<vector<int>> matrix, vector<vector<int>>* tree, vector<int>* processed, int node);
-vector<int> listCompute(vector<int> input);
+void listProcess_Exo4(vector<vector<int>> matrix, vector<vector<int>>* tree, vector<int>* processed, int inputNode);
+vector<int> listCompute_Exo4(vector<int> input);
 
-std::vector<int> getVectorFromInput_Exo4(std::string intputFileName);
-void writeVectorIntotextFile_Exo4(std::vector<int>, std::string outputFileName);
+vector<int> getDataFromTextFile_Exo4(string intputFileName);
+void writeDataIntoTextFile_Exo4(vector<int>, string outputFileName);
 
 #endif /* exo4_hpp */
