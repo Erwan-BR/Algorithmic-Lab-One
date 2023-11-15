@@ -16,7 +16,7 @@ else
 fi
 
 # 2. Compiling main.cpp and every cpp file found by find into the build folder
-g++ main.cpp $(find exo_1/ exo_2/ exo_3/ exo_4/ exo_5/ exo_6/ -name "*.cpp") -o "$BUILD_FOLDER/Labs_Algo"
+g++ main.cpp $(find exo_1/ exo_2/ exo_3/ exo_4/ exo_5/ exo_6/ -name "*.cpp") -o "$BUILD_FOLDER/Labs_Algo" -Wall -Wextra
 
 # 3. Checking if compilation worked.
 if [ $? -eq 0 ]; then
