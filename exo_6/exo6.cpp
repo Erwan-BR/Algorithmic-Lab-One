@@ -16,7 +16,7 @@ void matrixProcess(vector<vector<int>> matrix, vector<int>* distances, vector<in
 	int i, j;
 	for (i = 0; i < matrix.size(); i++)
 	{
-		if((distance + matrix[node - 1][i]) < (*distances)[i] && -1 != matrix[node-1][i])
+		if(-1 != matrix[node-1][i] && (((distance + matrix[node - 1][i]) < (*distances)[i]) || -1 == (*distances)[i]))
 		{
 			(*previous)[i] = node;
 			matrixProcess(matrix, distances, previous, i+1, distance + matrix[node - 1][i]);
