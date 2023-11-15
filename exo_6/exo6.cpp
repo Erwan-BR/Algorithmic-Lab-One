@@ -1,24 +1,37 @@
 #include "./exo6.hpp"
 
-
 #include <iostream>
 #include <string>
 #include <limits>
 
 using namespace std;
 
+/// @brief 
+/// @param matrix 
+/// @param distances 
+/// @param previous 
+/// @param node 
+/// @param distance 
 void matrixProcess(vector<vector<int>> matrix,vector<int>* distances,vector<int>* previous,int node,int distance){
+	
 	(*distances)[node-1] = distance;
 
-	int i,j;
-	for (i=0;i<matrix.size();i++){
-		if((distance+matrix[node-1][i])<(*distances)[i]){
+	int i, j;
+	for (i=0; i < matrix.size(); i++)
+	{
+		if((distance+matrix[node - 1][i]) < (*distances)[i] && -1 != matrix[node-1][i])
+		{
 			(*previous)[i] = node;
-			matrixProcess(matrix,distances,previous,i+1,distance+matrix[node-1][i]);
+			matrixProcess(matrix, distances, previous, i+1, distance + matrix[node - 1][i]);
 		}
 	}
 }
-vector<int> matrixCompute(vector<int> input){
+
+/// @brief 
+/// @param input 
+/// @return 
+vector<int> matrixCompute(vector<int> input)
+{
 	int nodes_n = input[0];
 	int edges_n = input[1];
 	int start = input[2];
@@ -27,42 +40,50 @@ vector<int> matrixCompute(vector<int> input){
 	vector<vector<int>> matrix;
 	vector<int> ret;
 
-	int i,j;
+	int i, j;
 
-	for (i=0;i<nodes_n;i++){
+	for (i=0; i<nodes_n; i++)
+	{
 		matrix.push_back({});
-		for(j=0;j<nodes_n;j++){
-			matrix[i].push_back(numeric_limits<int>::max());
+		for(j=0; j<nodes_n; j++)
+		{
+			matrix[i].push_back(-1);
 		}
 	}
 
-	for(i=1;i<edges_n;i++){
+	for(i=1; i<edges_n; i++)
+	{
 		matrix[(input)[i*3]-1][(input)[i*3+1]-1] = (input)[i*3+2];
 		matrix[(input)[i*3+1]-1][(input)[i*3]-1] = (input)[i*3+2];
 	}
 
 	vector<int> distances;
 	vector<int> previous;
-	for (i=0;i<nodes_n;i++){
-		distances.push_back(numeric_limits<int>::max());
+	for (i=0;i<nodes_n;i++)
+	{
+		distances.push_back(-1);
 		previous.push_back(0);
 	}
 
 
-	matrixProcess(matrix,&distances,&previous,start+1,0);
+	matrixProcess(matrix, &distances, &previous, start+1, 0);
 
 
-	i = end-1;
-	while(distances[i]!=0){
+	i = end - 1;
+	while(distances[i]!=0)
+	{
 		i = previous[i];
-		ret.insert(ret.begin(),i+1);
+		ret.insert(ret.begin(), i+1);
 	}
-	ret.insert(ret.begin(),start);
-	ret.insert(ret.begin(),distances[end-1]);
+	ret.insert(ret.begin(), start);
+	ret.insert(ret.begin(), distances[end-1]);
 
 	return ret;
 }
 
+/// @brief 
+/// @param inputFileName 
+/// @return 
 std::vector<int> getVectorFromInput_Exo6(std::string inputFileName)
 {
     // Variables to retrieve from the line.
@@ -90,18 +111,17 @@ std::vector<int> getVectorFromInput_Exo6(std::string inputFileName)
         std::stringstream ss;
 
         // Retrieve lines into lineFromInputText
-        while(std::getline(readingFile, lineFromInputText)){
+        while(std::getline(readingFile, lineFromInputText))
+		{
+			// constructing stream from the string
+			ss = std::stringstream(lineFromInputText);
 
-				// constructing stream from the string
-				ss = std::stringstream(lineFromInputText);
-
-				// Looping while i can get another int
-				while (getline(ss, token, ' '))
-				{
-					// Store token string in the vector
-					outputVector.push_back(std::stoi(token));
-				}
-
+			// Looping while i can get another int
+			while (getline(ss, token, ' '))
+			{
+				// Store token string in the vector
+				outputVector.push_back(std::stoi(token));
+			}
         }
 
         // Closing the file because we do not need it anymore.
@@ -110,6 +130,9 @@ std::vector<int> getVectorFromInput_Exo6(std::string inputFileName)
     return outputVector;
 }
 
+/// @brief 
+/// @param vectorToWrite 
+/// @param outputFileName 
 void writeVectorIntotextFile_Exo6(std::vector<int> vectorToWrite, std::string outputFileName)
 {
     // Instantiation of a fstream object which is a file.
@@ -128,7 +151,7 @@ void writeVectorIntotextFile_Exo6(std::vector<int> vectorToWrite, std::string ou
 		writingFile << to_string(vectorToWrite[0]) << endl;
 		int i;
 		writingFile << to_string(vectorToWrite[1]);
-		for (i=2;i<vectorToWrite.size();i++)
+		for (i=2; i<vectorToWrite.size(); i++)
 		{
 			writingFile << "->" << to_string(vectorToWrite[i]);
 
@@ -138,6 +161,3 @@ void writeVectorIntotextFile_Exo6(std::vector<int> vectorToWrite, std::string ou
 		writingFile.close();
 	}
 }
-
-
-
