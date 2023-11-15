@@ -2,81 +2,63 @@
 
 using namespace std;
 
-/// @brief 
-/// @param matrix 
-/// @param distances 
-/// @param previous 
-/// @param node 
-/// @param distance 
-void matrixProcess(vector<vector<int>> matrix, vector<int>* distances, vector<int>* previous, int node, int distance)
-{
-	
-	(*distances)[node-1] = distance;
 
-	int i, j;
-	for (i = 0; i < matrix.size(); i++)
-	{
-		if(-1 != matrix[node-1][i] && (((distance + matrix[node - 1][i]) < (*distances)[i]) || -1 == (*distances)[i]))
-		{
-			(*previous)[i] = node;
-			matrixProcess(matrix, distances, previous, i+1, distance + matrix[node - 1][i]);
-		}
-	}
-}
-
-/// @brief 
-/// @param input 
-/// @return 
-vector<int> matrixCompute(vector<int> input)
-{
+vector<int> matrixCompute(vector<int> input){
 	int nodes_n = input[0];
 	int edges_n = input[1];
 	int start = input[2];
 	int end = input[3];
 
 	vector<vector<int>> matrix;
-	vector<int> ret;
 
-	int i, j;
+	int i,j;
 
-	for (i=0; i<nodes_n; i++)
-	{
+	for (i=0;i<nodes_n;i++){
 		matrix.push_back({});
-		for(j=0; j<nodes_n; j++)
-		{
+		for(j=0;j<nodes_n;j++){
 			matrix[i].push_back(-1);
 		}
 	}
 
-	for(i=1; i<edges_n; i++)
-	{
+	for(i=1;i<edges_n+1;i++){
 		matrix[(input)[i*3+1]-1][(input)[i*3+2]-1] = (input)[i*3+3];
 		matrix[(input)[i*3+2]-1][(input)[i*3+1]-1] = (input)[i*3+3];
 	}
 
-	vector<int> distances;
-	vector<int> previous;
-	for (i=0; i<nodes_n; i++)
-	{
-		distances.push_back(-1);
-		previous.push_back(0);
+	vector<int> distances = vector<int>(nodes_n, std::numeric_limits<int>::max());
+	vector<int> previous = vector<int>(nodes_n, -1);
+	distances[start - 1] = 0;
+
+	std::set<pair<int, int>> toVisit;
+	toVisit.insert({0, start - 1});
+
+	while (!toVisit.empty()) {
+		int current = toVisit.begin()->second;
+		toVisit.erase(toVisit.begin());
+
+		for (int k = 0; k < nodes_n; k++) {
+			if (matrix[current][k] != std::numeric_limits<int>::max()) {
+				int dist = distances[current] + matrix[current][k];
+				if (dist < distances[k]) {
+					toVisit.erase({distances[k], k});
+					distances[k] = dist;
+					previous[k] = current;
+					toVisit.insert({dist, k});
+				}
+			}
+		}
 	}
 
-
-	matrixProcess(matrix, &distances, &previous, start+1, 0);
-
-
-	i = end - 1;
-	while(0 != distances[i])
-	{
-		i = previous[i];
-		ret.insert(ret.begin(), i+1);
+	vector<int> ret;
+	ret.push_back(distances[end-1]);
+	for (int at = end - 1; at != -1; at = previous[at]) {
+		ret.push_back(at + 1);
 	}
-	ret.insert(ret.begin(), start);
-	ret.insert(ret.begin(), distances[end-1]);
+	std::reverse(ret.begin(), ret.end());
 
 	return ret;
 }
+
 
 /// @brief 
 /// @param inputFileName 

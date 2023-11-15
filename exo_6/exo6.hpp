@@ -7,10 +7,11 @@
 #include <string>
 #include <sstream>
 #include <limits>
+#include <set>
+#include <algorithm>
 
 using namespace std;
 
-void matrixProcess(vector<vector<int>> matrix, vector<int>* distances, vector<int>* previous, int node, int distance);
 vector<int> matrixCompute(vector<int> input);
 
 std::vector<int> getVectorFromInput_Exo6(std::string intputFileName);
