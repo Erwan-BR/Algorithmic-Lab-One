@@ -28,7 +28,7 @@ std::vector<std::vector<int>> getMatrixOfRests(const std::vector<int> inputVecto
     maxSizeByRest[inputVector[0] % divider] = 1;
 
     // Iterating among all values from inputVector
-    for (int index = 1; index < inputVector.size(); index++)
+    for (long unsigned int index = 1; index < inputVector.size(); index++)
     {
         // Iterating among all possibles rests from the division
         for (int subIndex = 0; subIndex < divider; subIndex++)
@@ -77,7 +77,6 @@ std::vector<std::vector<int>> findLongestSequenceFromMatrix(const std::vector<in
 {
     // Retrieve the dimensions of the matrix.
     int numberOfLines = inputMatrix.size();
-    int numberOfColumns = inputMatrix[0].size();
 
     // Instantiation of the outputVector
     std::vector<std::vector<int>> outputVector ;
